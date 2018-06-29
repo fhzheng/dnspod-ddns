@@ -1,0 +1,12 @@
+syntax = "proto3";
+package xyz.zpath.java.mqdemo.proto;
+message Test1 {
+ string from = 1;
+ string to = 2;
+ string title = 3;
+ string body = 4; 
+}
+message Test2 {
+    string s = 1;
+    string b = 2;
+}
