@@ -1,0 +1,9 @@
+{
+    "activemq": {
+        "ip": "127.0.0.1",
+        "port": 61616,
+        "queue": "nodeQueue",
+        "user": "user",
+        "password": "password"
+    }
+}
