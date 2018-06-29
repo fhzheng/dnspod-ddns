@@ -2,7 +2,7 @@ var path = require('path'),
     fs = require('fs'),
     async = require('async'),
     protobuf = require('protobufjs'),
-    logger = require('../lib/common').logger,
+    logger = require('../lib/common').logger(),
     Stomp = require('stomp-client'),
     destination = '/queue/nodeTest';
 var inited = false;
@@ -35,7 +35,7 @@ class MsgService {
             mq_client.connect(sessionId => {
                 mq_client.publish(dest, buffer);
                 logger.info('payload sended\n', payload);
-                mq_client.disconnect(()=>{
+                mq_client.disconnect(() => {
                     resolve();
                 });
             }, err => {
@@ -52,7 +52,7 @@ function init() {
             resolve();
             return;
         }
-        logger.info('initing..........');
+        logger.info('Message service initing..........');
         async.waterfall([
             function (callback) {
                 fs.exists("./", function (exists) {
@@ -121,14 +121,14 @@ function getService(groupName) {
                     } else {
                         protobuf.load(msgGroup.file, (err, root) => {
                             cachedRoot = msgGroup.root = root;
-                            logger.info('start to load file', msgGroup.file);
+                            logger.debug('start to load file', msgGroup.file);
                             if (err) {
                                 reject(err);
                             }
                             try {
                                 service = cachedRoot.lookupType(name);
                                 msgGroup.services[name] = service = new MsgService(service);
-                                logger.info('get service ' + name + ' from root', cachedRoot.files);
+                                logger.debug('get service ' + name + ' from root', cachedRoot.files);
                                 resolve(service);
                             } catch (error) {
                                 reject(error);
