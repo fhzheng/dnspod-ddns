@@ -2,9 +2,13 @@ var path = require('path'),
     fs = require('fs'),
     async = require('async'),
     protobuf = require('protobufjs'),
-    logger = require('../lib/common').logger;
+    logger = require('../lib/common').logger,
+    Stomp = require('stomp-client'),
+    destination = '/queue/nodeTest';
 var inited = false;
 var msgs = {};
+var mq_client = null;
+var destination = '/queue/nodeTest';
 class msg {
     constructor(filename, service) {
         this.file = filename;
@@ -12,8 +16,37 @@ class msg {
         this.root = null;
     }
 }
+class MsgService {
+    constructor(service) {
+        this.service = service;
+        this.name = service.name;
+    }
+    sendMsg(payload, dest) {
+        return new Promise((resolve, reject) => {
+            var validErr = this.service.verify(payload);
+            if (validErr) {
+                reject(validErr);
+            }
+            if (!dest) {
+                dest = destination;
+            }
+            var message = this.service.create(payload);
+            let buffer = this.service.encode(message).finish();
+            mq_client.connect(sessionId => {
+                mq_client.publish(dest, buffer);
+                logger.info('payload sended\n', payload);
+                mq_client.disconnect(()=>{
+                    resolve();
+                });
+            }, err => {
+                reject(err);
+            })
+        })
+    }
+}
 
 function init() {
+    mq_client = new Stomp('192.168.123.118', 61613);
     return new Promise(function (resolve, reject) {
         if (inited) {
             resolve();
@@ -79,7 +112,7 @@ function getService(groupName) {
                     if (cachedRoot) {
                         try {
                             service = cachedRoot.lookupType(name);
-                            msgGroup.services[name] = service;
+                            msgGroup.services[name] = service = new MsgService(service);
                             logger.info('get service ' + name + ' from root', cachedRoot.files);
                             resolve(service);
                         } catch (error) {
@@ -94,7 +127,7 @@ function getService(groupName) {
                             }
                             try {
                                 service = cachedRoot.lookupType(name);
-                                msgGroup.services[name] = service;
+                                msgGroup.services[name] = service = new MsgService(service);
                                 logger.info('get service ' + name + ' from root', cachedRoot.files);
                                 resolve(service);
                             } catch (error) {
