@@ -12,3 +12,6 @@ testing
 node_modules
 .nide
 config/config.json
+config/config.js
+.vscode/
+dnspod.txt
