@@ -1,6 +1,6 @@
 # dnspod-ddns
 
-dnspod-ddns is a ddns updating tool of [DNSPod](http://www.dnspod.cn).
+dnspod-ddns is a ddns updating tool of [DNSPod](http://www.dnspod.cn). Integrated with Email alerting.
 It was originally designed for use with [node.js](http://nodejs.org).
 
 
