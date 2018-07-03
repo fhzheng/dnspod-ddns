@@ -1,0 +1,11 @@
+{
+    "appenders": [{
+        "type": "clustered",
+        "appenders": [{
+            "type": "dateFile",
+            "filename": "../logs/app.log",
+            "pattern": "-yyyy-MM-dd",
+            "category": "main"
+        }]
+    }]
+}

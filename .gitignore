@@ -13,5 +13,6 @@ node_modules
 .nide
 config/config.json
 config/config.js
+config/log4js.json
 .vscode/
 dnspod.txt
