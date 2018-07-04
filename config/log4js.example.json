@@ -2,6 +2,12 @@
     "appenders": [{
         "type": "dateFile",
         "filename": "../logs/app.log",
-        "pattern": "-yyyy-MM-dd"
+        "pattern": "-yyyy-MM-dd",
+        "catetory": "app"
+    }, {
+        "type": "file",
+        "filename": "../logs/consumer.log",
+        "pattern": "-yyyy-MM-dd",
+        "catetory": "consumer"
     }]
 }
