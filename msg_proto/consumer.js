@@ -4,7 +4,7 @@ var destination = config.activemq.queue;
 var mq_client = new Stomp(config.activemq.ip, config.activemq.port);
 var messageService = require('../msg_proto/messageService');
 var async = require('async');
-var logger = require('../lib/common').logger();
+var logger = require('../lib/common').logger('consumer');
 var mailer = require('../lib/mailer');
 
 function connect() {
